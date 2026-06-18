@@ -1,6 +1,6 @@
 ---
 title: I Dropped Fullstack From My Title
-date: 2026-06-17
+date: 2026-06-13
 excerpt: How stripping frontend bloat from my focus and specializing in backend depth increased my market value and career ROI.
 ---
 

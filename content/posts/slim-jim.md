@@ -1,6 +1,6 @@
 ---
 title: Slim Jim – Lightweight HTML to PDF Conversion
-date: 2026-06-16
+date: 2026-06-15
 excerpt: Engineering a pragmatic, low-footprint HTML-to-PDF serverless microservice using strategic dependencies and clean architecture.
 ---
 
