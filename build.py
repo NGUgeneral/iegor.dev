@@ -21,6 +21,11 @@ OUTPUT_DIR = BASE_DIR / "docs"
 SRC_ASSETS_DIR = BASE_DIR / "assets"
 LAYOUT_TEMPLATE = "layout.html"
 
+# Subdirectory Routing Control
+# Set to "/egor.dev" for standard GitHub Pages project links.
+# Change to "" (empty string) once you connect your custom egor.dev domain.
+BASE_URL = "/egor.dev"
+
 # Ensure paths exist
 TEMPLATES_DIR.mkdir(exist_ok=True)
 CONTENT_DIR.mkdir(exist_ok=True)
@@ -28,21 +33,10 @@ POSTS_DIR.mkdir(exist_ok=True)
 
 
 def parse_front_matter(content):
-    """
-    Parse YAML-style front-matter from markdown.
-    Expects format:
-    ---
-    key: value
-    key2: value2
-    ---
-    # Markdown content
-    
-    Returns: (metadata_dict, markdown_content_string)
-    """
+    """Parse YAML-style front-matter from markdown."""
     if not content.startswith("---"):
         return {}, content
 
-    # Split on the second --- occurrence
     parts = content.split("---", 2)
     if len(parts) < 3:
         return {}, content
@@ -50,7 +44,6 @@ def parse_front_matter(content):
     front_matter_text = parts[1].strip()
     markdown_content = parts[2].strip()
 
-    # Parse front-matter (simple YAML key: value parsing)
     metadata = {}
     for line in front_matter_text.split("\n"):
         line = line.strip()
@@ -62,8 +55,13 @@ def parse_front_matter(content):
 
 
 def render_markdown(content):
-    """Convert markdown to HTML."""
-    return markdown.markdown(content, extensions=["fenced_code", "tables", "toc"])
+    """Convert markdown to HTML and fix absolute paths for subdirectories."""
+    html = markdown.markdown(content, extensions=["fenced_code", "tables", "toc"])
+    
+    # Automatically rewrite root-relative links/images inside markdown text
+    html = html.replace('src="/assets/', f'src="{BASE_URL}/assets/')
+    html = html.replace('href="/post/', f'href="{BASE_URL}/post/')
+    return html
 
 
 def read_file(path):
@@ -98,15 +96,10 @@ def copy_assets():
 
 
 def process_post(post_path):
-    """
-    Process a single post markdown file.
-    Returns: {path_slug, metadata, html_content, file_path}
-    """
+    """Process a single post markdown file."""
     content = read_file(post_path)
     metadata, markdown_content = parse_front_matter(content)
     html_content = render_markdown(markdown_content)
-
-    # Generate slug from filename (remove .md extension)
     slug = post_path.stem
 
     return {
@@ -133,13 +126,12 @@ def build_posts_page(posts):
         print("⚠ No posts to list.")
         return
 
-    # Build posts list HTML
     posts_list_html = '<ul class="post-list">'
     for post in posts:
         posts_list_html += f'''
     <li class="post-item">
         <div class="post-title">
-            <a href="/post/{post["slug"]}/">{post["title"]}</a>
+            <a href="{BASE_URL}/post/{post["slug"]}/">{post["title"]}</a>
         </div>
         <div class="post-date">{post["date"]}</div>
         <div class="post-excerpt">{post["excerpt"]}</div>
@@ -147,8 +139,8 @@ def build_posts_page(posts):
 '''
     posts_list_html += "</ul>"
 
-    # Render posts page
     posts_page_html = env.get_template(LAYOUT_TEMPLATE).render(
+        base_url=BASE_URL,
         title="Posts",
         description="A collection of posts about backend engineering, system design, and technical insights.",
         content=f"<h1>Posts</h1>\n{posts_list_html}",
@@ -168,21 +160,18 @@ def build_posts():
         print("⚠ No posts directory found.")
         return posts
 
-    # Process all .md files in posts directory
     for post_file in sorted(POSTS_DIR.glob("*.md")):
         post = process_post(post_file)
         posts.append(post)
         print(f"✓ Processed: {post['title']} ({post_file.name})")
 
-    # Sort posts by date (newest first)
     posts.sort(key=lambda p: parse_date(p["date"]), reverse=True)
 
-    # Generate HTML for each post
     for post in posts:
         output_path = OUTPUT_DIR / "post" / post["slug"] / "index.html"
 
-        # Render post page
         post_html = env.get_template(LAYOUT_TEMPLATE).render(
+            base_url=BASE_URL,
             title=post["title"],
             description=post.get("excerpt", ""),
             content=post["content"],
@@ -196,7 +185,7 @@ def build_posts():
 
 
 def build_home(posts):
-    """Build the home page (about.md) without posts list."""
+    """Build the home page (about.md)."""
     about_path = CONTENT_DIR / "about.md"
 
     if not about_path.exists():
@@ -207,8 +196,8 @@ def build_home(posts):
     metadata, markdown_content = parse_front_matter(content)
     html_content = render_markdown(markdown_content)
 
-    # Render home page with just about content
     home_html = env.get_template(LAYOUT_TEMPLATE).render(
+        base_url=BASE_URL,
         title="Home",
         description="Backend engineer, system design enthusiast, and technical writer.",
         content=html_content,
@@ -232,8 +221,8 @@ def build_contact():
     metadata, markdown_content = parse_front_matter(content)
     html_content = render_markdown(markdown_content)
 
-    # Render contact page
     contact_html = env.get_template(LAYOUT_TEMPLATE).render(
+        base_url=BASE_URL,
         title="Contact",
         description="Get in touch for backend architecture, system design, and technical consulting.",
         content=html_content,
@@ -260,40 +249,21 @@ def main():
     """Main build process."""
     print("\n🔨 Building static site...\n")
 
-    # Step 1: Clear output directory completely
     clear_docs_dir()
-
-    # Step 2: Copy assets from project root into docs/assets/
     copy_assets()
 
-    # Step 3: Setup Jinja2 environment
     global env
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
 
-    # Step 4: Build posts
     posts = build_posts()
     print()
 
-    # Step 5: Build dedicated posts listing page
     build_posts_page(posts)
-
-    # Step 6: Build home page (without posts list)
     build_home(posts)
-
-    # Step 7: Build contact page
     build_contact()
-
-    # Step 8: Create SEO files
     create_robots_txt()
 
     print(f"\n✅ Build complete! Output: {OUTPUT_DIR}\n")
-    print(f"Generated files:")
-    print(f"  - Home page: /")
-    print(f"  - Posts listing: /posts/")
-    print(f"  - Contact page: /contact/")
-    print(f"  - Assets copied: /assets/")
-    print(f"  - {len(posts)} post(s) at /post/{{slug}}/")
-    print()
 
 
 if __name__ == "__main__":
