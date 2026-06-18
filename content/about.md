@@ -4,28 +4,29 @@ title: About
 
 # About Me
 
-I'm a backend engineer passionate about building scalable systems, writing clean code, and sharing technical knowledge.
+Master's degree in Computer Science with 10+ years of professional background specializing in high-scale backend systems engineering, polyglot development, and distributed architectures.
 
-## Background
+I land in complex corporate or legacy environments as an independent fixer—rapidly isolating technical debt, designing secure system boundaries, and enforcing strict engineering guardrails. I treat infrastructure as a software blueprinting problem to provision high-velocity pipelines that scale with zero external bloat.
 
-With years of experience in distributed systems and cloud architecture, I've worked on problems ranging from real-time data processing to high-throughput API design. I believe in pragmatic engineering—solving real problems with minimal complexity.
+## Core Systems Mastery
 
-## Interests
+- **Polyglot Backend Engines**: Advanced, hands-on execution across Python (FastAPI, Flask, Pylons), C# (.NET Core, WPF, Akka.net), and Go
+- **Systems Architecture**: Microservices, gRPC, REST APIs, Event-Driven Architectures, and high-throughput transaction pipelines
+- **Cloud Infrastructure (IaC)**: AWS (ECS/Fargate, Lambda, SNS, CloudFormation), Azure (Bicep, VNets, App Services), Docker, and automated CI/CD
 
-- **System Design** – Designing scalable, resilient architectures
-- **Python & Backend Development** – Building robust server-side applications
-- **Technical Writing** – Making complex concepts accessible
-- **DevOps & Infrastructure** – Automating deployment and operations
-- **Open Source** – Contributing to and maintaining community projects
+## Legacy Modernization & Refactoring
 
-## This Site
+- **Database Decoupling**: Extracting complex business logic from fragile SQL stored procedures into maintainable Entity Framework handlers in the application layer
+- **Legacy Overhauls**: Deprecating problematic legacy frameworks (e.g., migrating core logic from obsolete VB.NET apps to modern C#/WPF implementations)
+- **Ecosystem Standardization**: Resolving fragmented macro/template environments by introducing formal code structures, strict versioning, and predictable developer patterns
 
-This portfolio is built with a custom static site generator written in Python. It demonstrates the principles I advocate: simplicity, performance, and maintainability. No frameworks, no unnecessary complexity—just clean, pragmatic engineering.
+## Deep Identity & Security Integration
 
-## Let's Work Together
+Heavyweight experience hardening distributed networks, establishing secure API data proxies, and architecting identity boundaries. Proficient in JWT / Token-Based Auth, Windows Authentication, and enterprise identity providers (Okta, Google Auth).
 
-I'm always interested in discussing backend architecture, engineering challenges, or collaboration opportunities. Reach out if you'd like to talk!
+## Cross-Functional Systems Awareness
 
----
+- **Code Stabilization**: Auditing, documenting, and encapsulating legacy or external contractor code to establish rigid future development guardrails
+- **Frontend Integration**: Functional structural proficiency in TypeScript and React to guarantee seamless client-server API contract integration without owning UI delivery
 
-**Technical Stack:** Python, Jinja2, Markdown, GitHub Pages, HTML/CSS
+Available for high-velocity Freelance, ZZP, and Interim Contract engagements across the Netherlands.

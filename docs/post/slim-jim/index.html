@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Design Notes – Egor Dev</title>
-    <meta name="description" content="A comprehensive guide to designing scalable distributed systems with practical examples and real-world patterns.">
-    <meta name="date" content="2026-06-15">
+    <title>Slim Jim – Lightweight HTML to PDF Conversion – Egor Dev</title>
+    <meta name="description" content="Engineering a pragmatic, low-footprint HTML-to-PDF serverless microservice using strategic dependencies and clean architecture.">
+    <meta name="date" content="2026-06-16">
     <style>
         * {
             margin: 0;
@@ -196,6 +196,22 @@
             border-radius: 0;
         }
 
+        .content img {
+            max-width: 100%;
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+
+        .content img.vertical {
+            max-width: 400px;
+            width: 100%;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .post-list {
             list-style: none;
         }
@@ -313,45 +329,37 @@
             <nav>
                 <a href="/">About</a>
                 <a href="/posts/">Posts</a>
+                <a href="/contact/">Contact</a>
             </nav>
         </div>
     </header>
 
     <main>
         <article class="content">
-            <h1 id="system-design-notes">System Design Notes</h1>
-<p>Building scalable systems is one of the most rewarding challenges in backend engineering. This post explores key principles and patterns that have proven effective across various domains.</p>
-<h2 id="scalability-fundamentals">Scalability Fundamentals</h2>
-<p>Vertical scaling (adding more power to a single server) is simple but limited. Horizontal scaling (adding more machines) requires distributed systems thinking.</p>
-<h3 id="key-principles">Key Principles</h3>
-<ol>
-<li><strong>Statelessness</strong> – Services should not hold state between requests</li>
-<li><strong>Caching</strong> – Reduce database queries through intelligent caching layers</li>
-<li><strong>Asynchrony</strong> – Use queues for non-blocking operations</li>
-<li><strong>Monitoring</strong> – Observe system behavior to detect issues early</li>
-</ol>
-<h2 id="database-design">Database Design</h2>
-<p>When designing databases for scale:</p>
+            <h1 id="slim-jim-lightweight-html-to-pdf-conversion">Slim Jim – Lightweight HTML to PDF Conversion</h1>
+<p><img alt="Slim Jim Architecture" src="/assets/Slim%20Jim.jpg" /></p>
+<p>Yet another HTML to PDF converter—or why YAHTPC is not the best name for your service.</p>
+<p>Throughout my career, I've found myself returning to the exact same architectural bottleneck over and over again. This week, I finally decided to engineer the definitive solution so I never have to build it again. I'm talking about backend HTML-to-PDF conversion. That's how I decided to build a service, which I call Slim Jim.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>As a user, the expectation is straightforward: you want a perfect, 1-to-1 screenshot of your layout captured into a PDF file. But on the backend, the reality of rendering modern, rich frontends is incredibly heavy. For high-throughput, primitive documents like warehouse barcodes, thermal labels, and receipts, spinning up a headless browser (like Puppeteer or Chromium) inside a container is a massive resource drain.</p>
+<p>I needed a lean, stateless compilation bridge. Here is how the architecture evolved:</p>
+<h2 id="iteration-1-the-zero-dependency-dream">Iteration 1: The Zero-Dependency Dream</h2>
+<p>My first thought was to build a zero-dependency, manual parser. The plan was simple:</p>
 <ul>
-<li>Use sharding to distribute data across multiple servers</li>
-<li>Consider read replicas for read-heavy workloads</li>
-<li>Implement connection pooling to manage resources efficiently</li>
-<li>Monitor query performance and create indexes strategically</li>
+<li>Parse the incoming raw string, normalize the HTML, and handle the edge cases natively</li>
+<li>Take that clean structure and write PDF bytes manually while supporting standard HTML tags</li>
 </ul>
-<h2 id="real-world-example-load-balancing">Real-world Example: Load Balancing</h2>
-<pre><code class="language-python"># A simple load balancer implementation
-import random
-
-class LoadBalancer:
-    def __init__(self, servers):
-        self.servers = servers
-
-    def route_request(self):
-        return random.choice(self.servers)
-</code></pre>
-<p>This pattern ensures traffic is distributed evenly across available servers, improving availability and performance.</p>
-<h2 id="conclusion">Conclusion</h2>
-<p>System design is both art and science. The best architecture depends on understanding your specific constraints and requirements.</p>
+<p>Is it doable? Absolutely. It would have a microscopic memory footprint and be the perfect AWS Lambda serverless function. But engineering is about trade-offs. I realized this "romantic" MVP would quickly turn into a maintenance nightmare. A custom parser only survives as long as its original author actively supports it.</p>
+<p>I traded the zero-dependency romance for long-term stability and pivoted.</p>
+<h2 id="iteration-2-the-pragmatic-architecture">Iteration 2: The Pragmatic Architecture</h2>
+<p>I decided to leverage market-standard dependencies that specifically solved my core problems while easily clearing enterprise security audits.</p>
+<p><strong>Problem 1: HTML Normalization.</strong> Instead of writing a custom parser, I brought in BeautifulSoup. It perfectly handles messy string normalization and DOM structuring. When configured correctly, the execution overhead is minimal, and it is universally vetted by corporate security.</p>
+<p><strong>Problem 2: Low-Level PDF Abstraction.</strong> I wanted to interact with the PDF generation as closely as possible without writing raw bytes. I landed on ReportLab. The core engine is fully open-source, aggressively maintained, and acts as a bulletproof abstraction layer.</p>
+<p>By wrapping these two tools in a clean Strategy pattern, I built the pipeline for Slim Jim.</p>
+<h2 id="the-result">The Result</h2>
+<p>Currently, I've wrapped the engine with FastAPI and Mangum, making it an ultra-fast, drop-in serverless microservice ready for AWS Lambda deployments. However, the architecture is so decoupled that if you want to embed it directly into your own codebase as a standalone feature, you can drop the API layer entirely—BeautifulSoup and ReportLab are the only true dependencies you need.</p>
+<p>Check it out, share your thoughts, drop a PR:
+🔗 <a href="https://lnkd.in/eMxc8gC2">Slim Jim Repository</a></p>
         </article>
     </main>
 

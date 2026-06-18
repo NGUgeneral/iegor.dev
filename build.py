@@ -79,10 +79,16 @@ def write_file(path, content):
 
 
 def clear_docs_dir():
-    """Clear the docs directory completely."""
+    """Clear the docs directory, preserving assets folder."""
     if OUTPUT_DIR.exists():
-        shutil.rmtree(OUTPUT_DIR)
-        print(f"✓ Cleared {OUTPUT_DIR}")
+        # Remove all subdirectories and files except assets
+        for item in OUTPUT_DIR.iterdir():
+            if item.name != "assets":
+                if item.is_dir():
+                    shutil.rmtree(item)
+                else:
+                    item.unlink()
+        print(f"✓ Cleared {OUTPUT_DIR} (preserved assets)")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
@@ -209,6 +215,31 @@ def build_home(posts):
     print(f"✓ Generated home page: {output_path.relative_to(BASE_DIR)}")
 
 
+def build_contact():
+    """Build the contact page."""
+    contact_path = CONTENT_DIR / "contact.md"
+
+    if not contact_path.exists():
+        print("⚠ No contact.md found. Skipping contact page generation.")
+        return
+
+    content = read_file(contact_path)
+    metadata, markdown_content = parse_front_matter(content)
+    html_content = render_markdown(markdown_content)
+
+    # Render contact page
+    contact_html = env.get_template(LAYOUT_TEMPLATE).render(
+        title="Contact",
+        description="Get in touch for backend architecture, system design, and technical consulting.",
+        content=html_content,
+        meta_tags='<meta name="og:type" content="website">',
+    )
+
+    output_path = OUTPUT_DIR / "contact" / "index.html"
+    write_file(output_path, contact_html)
+    print(f"✓ Generated contact page: {output_path.relative_to(BASE_DIR)}")
+
+
 def create_robots_txt():
     """Create a robots.txt file for SEO."""
     robots_content = """User-agent: *
@@ -248,7 +279,10 @@ def main():
     # Step 5: Build home page (without posts list)
     build_home(posts)
 
-    # Step 6: Create SEO files
+    # Step 6: Build contact page
+    build_contact()
+
+    # Step 7: Create SEO files
     create_robots_txt()
     create_gitkeep()
 
@@ -256,6 +290,7 @@ def main():
     print(f"Generated files:")
     print(f"  - Home page: /")
     print(f"  - Posts listing: /posts/")
+    print(f"  - Contact page: /contact/")
     print(f"  - {len(posts)} post(s) at /post/{{slug}}/")
     print()
 
