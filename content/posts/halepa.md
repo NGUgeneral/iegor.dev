@@ -1,6 +1,6 @@
 ---
 title: Halepa – Lightweight AWS Alert Router
-date: 2026-06-15
+date: 2026-06-14
 excerpt: A 15KB serverless alert bridge that routes AWS CloudWatch events to Discord, Telegram, and WhatsApp with zero cost and zero dependencies.
 ---
 
