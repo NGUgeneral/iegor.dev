@@ -18,6 +18,7 @@ CONTENT_DIR = BASE_DIR / "content"
 POSTS_DIR = CONTENT_DIR / "posts"
 TEMPLATES_DIR = BASE_DIR / "templates"
 OUTPUT_DIR = BASE_DIR / "docs"
+SRC_ASSETS_DIR = BASE_DIR / "assets"
 LAYOUT_TEMPLATE = "layout.html"
 
 # Ensure paths exist
@@ -79,17 +80,21 @@ def write_file(path, content):
 
 
 def clear_docs_dir():
-    """Clear the docs directory, preserving assets folder."""
+    """Clear the docs directory completely."""
     if OUTPUT_DIR.exists():
-        # Remove all subdirectories and files except assets
-        for item in OUTPUT_DIR.iterdir():
-            if item.name != "assets":
-                if item.is_dir():
-                    shutil.rmtree(item)
-                else:
-                    item.unlink()
-        print(f"✓ Cleared {OUTPUT_DIR} (preserved assets)")
+        shutil.rmtree(OUTPUT_DIR)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    print(f"✓ Cleared {OUTPUT_DIR}")
+
+
+def copy_assets():
+    """Copy static assets from the root assets/ directory to docs/assets/."""
+    if SRC_ASSETS_DIR.exists():
+        dst_assets_dir = OUTPUT_DIR / "assets"
+        shutil.copytree(SRC_ASSETS_DIR, dst_assets_dir, dirs_exist_ok=True)
+        print(f"✓ Copied assets to {dst_assets_dir.relative_to(BASE_DIR)}")
+    else:
+        print("⚠ No root assets directory found. Skipping asset copy.")
 
 
 def process_post(post_path):
@@ -251,46 +256,42 @@ Sitemap: https://egor.dev/sitemap.xml
     print(f"✓ Generated: robots.txt")
 
 
-def create_gitkeep():
-    """Create .gitkeep to ensure docs directory is tracked by git."""
-    # Create an empty .gitkeep file
-    gitkeep_path = OUTPUT_DIR / ".gitkeep"
-    gitkeep_path.touch()
-
-
 def main():
     """Main build process."""
     print("\n🔨 Building static site...\n")
 
-    # Step 1: Clear output directory
+    # Step 1: Clear output directory completely
     clear_docs_dir()
 
-    # Step 2: Setup Jinja2 environment
+    # Step 2: Copy assets from project root into docs/assets/
+    copy_assets()
+
+    # Step 3: Setup Jinja2 environment
     global env
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
 
-    # Step 3: Build posts
+    # Step 4: Build posts
     posts = build_posts()
     print()
 
-    # Step 4: Build dedicated posts listing page
+    # Step 5: Build dedicated posts listing page
     build_posts_page(posts)
 
-    # Step 5: Build home page (without posts list)
+    # Step 6: Build home page (without posts list)
     build_home(posts)
 
-    # Step 6: Build contact page
+    # Step 7: Build contact page
     build_contact()
 
-    # Step 7: Create SEO files
+    # Step 8: Create SEO files
     create_robots_txt()
-    create_gitkeep()
 
     print(f"\n✅ Build complete! Output: {OUTPUT_DIR}\n")
     print(f"Generated files:")
     print(f"  - Home page: /")
     print(f"  - Posts listing: /posts/")
     print(f"  - Contact page: /contact/")
+    print(f"  - Assets copied: /assets/")
     print(f"  - {len(posts)} post(s) at /post/{{slug}}/")
     print()
 
