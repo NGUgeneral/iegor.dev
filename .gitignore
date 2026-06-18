@@ -5,6 +5,7 @@ __pycache__/
 *.so
 .Python
 env/
+docs/
 venv/
 ENV/
 build/
@@ -30,7 +31,3 @@ wheels/
 *.swo
 *~
 .DS_Store
-
-# Project specific
-# Note: docs/ should NOT be in gitignore for GitHub Pages
-# The /docs folder is committed and deployed to GitHub Pages
