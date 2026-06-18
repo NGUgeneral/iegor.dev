@@ -55,12 +55,17 @@ def parse_front_matter(content):
 
 
 def render_markdown(content):
-    """Convert markdown to HTML and fix absolute paths for subdirectories."""
+    """Convert markdown to HTML and fix absolute paths for subdirectories using Regex."""
     html = markdown.markdown(content, extensions=["fenced_code", "tables", "toc"])
     
-    # Automatically rewrite root-relative links/images inside markdown text
-    html = html.replace('src="/assets/', f'src="{BASE_URL}/assets/')
-    html = html.replace('href="/post/', f'href="{BASE_URL}/post/')
+    if BASE_URL:
+        # 1. Finds ANY src="/..." or href="/..." and prepends BASE_URL
+        # Handles single/double quotes, and ignores protocol-relative external links (//)
+        html = re.sub(r'(src|href)=([\'"])/(?!\/)', rf'\1=\2{BASE_URL}/', html)
+        
+        # 2. Safety catch: If you accidentally forgot the leading slash for an asset (e.g. src="assets/...")
+        html = re.sub(r'(src)=([\'"])assets/', rf'\1=\2{BASE_URL}/assets/', html)
+        
     return html
 
 
