@@ -51,9 +51,16 @@
         }
 
         h1.site-title {
-            font-size: 1.75rem;
+            font-size: 2.75rem;
             font-weight: 600;
+            color: #2db898;
             margin-bottom: 0.5rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            h1.site-title {
+                color: #7a92ad;
+            }
         }
 
         .site-tagline {
@@ -325,7 +332,7 @@
     <header>
         <div class="header-container">
             <h1 class="site-title"><a href="{{ base_url }}/" style="color: inherit; text-decoration: none;">egor.dev</a></h1>
-            <p class="site-tagline">Senior Systems Architect & Backend Engineer | Python • .NET • Go • Cloud | Technical Writing.</p>
+            <p class="site-tagline">Senior Systems Architect & Backend Engineer: Python | .NET | Go | Cloud. Technical Writing</p>
             <nav>
                 <a href="{{ base_url }}/">About</a>
                 <a href="{{ base_url }}/posts/">Posts</a>
