@@ -1,12 +1,12 @@
 ---
-title: About the imposter, the growth, and holding to your guns
+title: About the impostor, the growth, and holding to your guns
 date: 2026-06-22
 excerpt: I made a full circle with Slim Jim - from "The Next Big Thing" to "Post-Mortem". But it was still a big win for me.
 ---
 
-![About the imposter, the growth, and holding to your guns](/assets/about-the-impostor-image.png)
+![About the impostor, the growth, and holding to your guns](/assets/about-the-impostor-image.png)
 
-# About the imposter, the growth, and holding to your guns
+# About the impostor, the growth, and holding to your guns
 
 ### The Validation
 
@@ -16,7 +16,7 @@ Recently, I looked under the hood of xhtml2pdf and my stomach completely dropped
 
 "Damn! I just reverse-engineered an existing industry standard from scratch. I am a total fraud."
 
-I was ashamed and angry with myself. Imposter syndrome immediately took the wheel. After yelling from the rooftops about Slim Jim and its high-stress benchmarks (1,000 PDFs in 1.6 seconds), I felt like an absolute fool who had just spent weeks reinventing the wheel.
+I was ashamed and angry with myself. Impostor syndrome immediately took the wheel. After yelling from the rooftops about Slim Jim and its high-stress benchmarks (1,000 PDFs in 1.6 seconds), I felt like an absolute fool who had just spent weeks reinventing the wheel.
 
 But then I forced myself to stop, breathe out, and look at the facts:  
 1. I didn't copy a blueprint.  
@@ -27,11 +27,11 @@ That isn't a failure—that is a massive validation of architectural instincts. 
 
 ### The Impostor
 
-It is highly interesting, though, how imposter syndrome catches us at our lowest. When we are juniors, we think imposter syndrome disappears once we put on the "big boy suit" and get a Lead or Architect title. It doesn't.
+It is highly interesting, though, how impostor syndrome catches us at our lowest. When we are juniors, we think impostor syndrome disappears once we put on the "big boy suit" and get a Lead or Architect title. It doesn't.
 
 It is very easy to receive negative feedback, take it close to heart, and wear that description of yourself as a new identity—an undervalued, belittled failure. Even if the feedback is valid, it does not reflect you as a whole person; it is nothing more than a snapshot of a professional who made a mistake. It is not a call to action to take off your "Seasoned Professional Suit" and expose the fraud you are underneath—because you aren't one.
 
-As we mature, the inner imposter stays, but the way we handle him changes. We don’t just take the hit. We hold to our guns and argue back with data. The more grounded and objective our arguments are against that voice, the more secure we become in our craft.
+As we mature, the inner impostor stays, but the way we handle him changes. We don’t just take the hit. We hold to our guns and argue back with data. The more grounded and objective our arguments are against that voice, the more secure we become in our craft.
 
 ### Slim Jim's Post-Mortem
 
