@@ -16,6 +16,7 @@ from jinja2 import Environment, FileSystemLoader
 BASE_DIR = Path(__file__).parent
 CONTENT_DIR = BASE_DIR / "content"
 POSTS_DIR = CONTENT_DIR / "posts"
+PROJECTS_DIR = CONTENT_DIR / "projects"
 TEMPLATES_DIR = BASE_DIR / "templates"
 OUTPUT_DIR = BASE_DIR / "docs"
 SRC_ASSETS_DIR = BASE_DIR / "assets"
@@ -125,6 +126,38 @@ def parse_date(date_str):
         return datetime.min
 
 
+def build_projects_page(projects):
+    """Build a dedicated projects listing page at /projects/index.html."""
+    if not projects:
+        print("⚠ No projects to list.")
+        return
+
+    projects_list_html = '<ul class="project-list">'
+    for project in projects:
+        projects_list_html += f'''
+            <li class="project-item">
+                <div class="project-title">
+                    <a href="{BASE_URL}/project/{project["slug"]}/">{project["title"]}</a>
+                </div>
+                <div class="project-date">{project["date"]}</div>
+                <div class="project-excerpt">{project["excerpt"]}</div>
+            </li>
+        '''
+    projects_list_html += "</ul>"
+
+    projects_page_html = env.get_template(LAYOUT_TEMPLATE).render(
+        base_url=BASE_URL,
+        title="Projects",
+        description="A list of implemented and supported projects.",
+        content=f"<h1>Projects</h1>\n{projects_list_html}",
+        meta_tags='<meta name="og:type" content="website">',
+    )
+
+    output_path = OUTPUT_DIR / "projects" / "index.html"
+    write_file(output_path, projects_page_html)
+    print(f"✓ Generated projects page: {output_path.relative_to(BASE_DIR)}")
+
+
 def build_posts_page(posts):
     """Build a dedicated posts listing page at /posts/index.html."""
     if not posts:
@@ -134,14 +167,14 @@ def build_posts_page(posts):
     posts_list_html = '<ul class="post-list">'
     for post in posts:
         posts_list_html += f'''
-    <li class="post-item">
-        <div class="post-title">
-            <a href="{BASE_URL}/post/{post["slug"]}/">{post["title"]}</a>
-        </div>
-        <div class="post-date">{post["date"]}</div>
-        <div class="post-excerpt">{post["excerpt"]}</div>
-    </li>
-'''
+            <li class="post-item">
+                <div class="post-title">
+                    <a href="{BASE_URL}/post/{post["slug"]}/">{post["title"]}</a>
+                </div>
+                <div class="post-date">{post["date"]}</div>
+                <div class="post-excerpt">{post["excerpt"]}</div>
+            </li>
+        '''
     posts_list_html += "</ul>"
 
     posts_page_html = env.get_template(LAYOUT_TEMPLATE).render(
@@ -155,6 +188,50 @@ def build_posts_page(posts):
     output_path = OUTPUT_DIR / "posts" / "index.html"
     write_file(output_path, posts_page_html)
     print(f"✓ Generated posts page: {output_path.relative_to(BASE_DIR)}")
+
+
+def build_projects():
+    """Build all project pages and return sorted list of projects."""
+    projects = []
+
+    if not PROJECTS_DIR.exists():
+        print("⚠ No projects directory found.")
+        return projects
+
+    for project_file in sorted(PROJECTS_DIR.glob("*.md")):
+        content = read_file(project_file)
+        metadata, markdown_content = parse_front_matter(content)
+        html_content = render_markdown(markdown_content)
+        slug = project_file.stem
+
+        project = {
+            "slug": slug,
+            "title": metadata.get("title", slug.replace("-", " ").title()),
+            "date": metadata.get("date", ""),
+            "excerpt": metadata.get("excerpt", ""),
+            "content": html_content,
+            "file_path": project_file,
+        }
+        projects.append(project)
+        print(f"✓ Processed: {project['title']} ({project_file.name})")
+
+    projects.sort(key=lambda p: parse_date(p["date"]), reverse=True)
+
+    for project in projects:
+        output_path = OUTPUT_DIR / "project" / project["slug"] / "index.html"
+
+        project_html = env.get_template(LAYOUT_TEMPLATE).render(
+            base_url=BASE_URL,
+            title=project["title"],
+            description=project.get("excerpt", ""),
+            content=project["content"],
+            meta_tags=f'<meta name="date" content="{project["date"]}">',
+        )
+
+        write_file(output_path, project_html)
+        print(f"  → Generated: {output_path.relative_to(BASE_DIR)}")
+
+    return projects
 
 
 def build_posts():
@@ -261,9 +338,11 @@ def main():
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
 
     posts = build_posts()
+    projects = build_projects()
     print()
 
     build_posts_page(posts)
+    build_projects_page(projects)
     build_home(posts)
     build_contact()
     create_robots_txt()
