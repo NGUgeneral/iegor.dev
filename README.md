@@ -16,15 +16,18 @@ A pragmatic, zero-runtime static site generator written in pure Python. Converts
 
 ```
 .
-├── build.py                    # Main build script
+├── build.py                        # Main build script
 ├── templates/
-│   └── layout.html            # Jinja2 base template (header, nav, footer, CSS)
+│   └── layout.html                 # Jinja2 base template (header, nav, footer, CSS)
 ├── content/
-│   ├── about.md               # Home page content
+│   ├── about.md                    # Home page content
 │   └── posts/
-│       ├── hello-world.md      # Sample post 1
+│       ├── hello-world.md          # Sample post 1
 │       └── system-design-notes.md  # Sample post 2
-├── docs/                      # OUTPUT - Generated static site (GitHub Pages)
+│   └── projects/
+│       ├── hello-world.md          # Sample project 1
+│       └── system-design-notes.md  # Sample project 2
+├── docs/                           # OUTPUT - Generated static site (GitHub Pages)
 │   ├── index.html
 │   ├── robots.txt
 │   └── post/
@@ -32,7 +35,7 @@ A pragmatic, zero-runtime static site generator written in pure Python. Converts
 │       │   └── index.html
 │       └── system-design-notes/
 │           └── index.html
-└── .venv/                     # Python virtual environment
+└── .venv/                           # Python virtual environment
 ```
 
 ## 🚀 Quick Start
@@ -78,8 +81,15 @@ python build.py
 ✓ Processed: System Design Notes (system-design-notes.md)
   → Generated: docs\post\hello-world\index.html
   → Generated: docs\post\system-design-notes\index.html
+✓ Processed: Hello World (hello-world.md)
+✓ Processed: System Design Notes (system-design-notes.md)
+  → Generated: docs\project\hello-world\index.html
+  → Generated: docs\project\system-design-notes\index.html
 
+✓ Generated posts page: docs\posts\index.html
+✓ Generated projects page: docs\projects\index.html
 ✓ Generated home page: docs\index.html
+✓ Generated contact page: docs\contact\index.html
 ✓ Generated: robots.txt
 
 ✅ Build complete!
