@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Ultra-lightweight static site generator for egor.dev
+Ultra-lightweight static site generator for iegor.dev
 Converts Markdown content with front-matter to static HTML using Jinja2 templates.
 """
 
@@ -23,9 +23,10 @@ SRC_ASSETS_DIR = BASE_DIR / "assets"
 LAYOUT_TEMPLATE = "layout.html"
 
 # Subdirectory Routing Control
-# Set to "/egor.dev" for standard GitHub Pages project links.
-# Change to "" (empty string) once you connect your custom egor.dev domain.
-BASE_URL = "/egor.dev"
+# Set to "/iegor.dev" for standard GitHub Pages project links.
+# Change to "" (empty string) once you connect your custom iegor.dev domain.
+# BASE_URL = "/iegor.dev"
+BASE_URL = ""
 
 # Ensure paths exist
 TEMPLATES_DIR.mkdir(exist_ok=True)
@@ -321,7 +322,7 @@ def create_robots_txt():
     robots_content = """User-agent: *
 Allow: /
 
-Sitemap: https://egor.dev/sitemap.xml
+Sitemap: https://iegor.dev/sitemap.xml
 """
     write_file(OUTPUT_DIR / "robots.txt", robots_content)
     print(f"✓ Generated: robots.txt")

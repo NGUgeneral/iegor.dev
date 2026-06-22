@@ -1,4 +1,4 @@
-# egor.dev – Ultra-Lightweight Static Site Generator
+# iegor.dev – Ultra-Lightweight Static Site Generator
 
 A pragmatic, zero-runtime static site generator written in pure Python. Converts Markdown content with YAML front-matter into clean, performant HTML served from GitHub Pages.
 
@@ -76,7 +76,7 @@ python build.py
 ```
 🔨 Building static site...
 
-✓ Cleared C:\Users\egoro\source\repos\egor.dev\docs
+✓ Cleared C:\Users\name\source\repos\iegor.dev\docs
 ✓ Processed: Hello World (hello-world.md)
 ✓ Processed: System Design Notes (system-design-notes.md)
   → Generated: docs\post\hello-world\index.html
