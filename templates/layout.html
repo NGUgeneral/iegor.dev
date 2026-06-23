@@ -6,6 +6,8 @@
     <title>{{ title }} – Egor Dev</title>
     <meta name="description" content="{{ description | default('Personal portfolio and technical writing by Egor.') }}">
     {{ meta_tags }}
+    <link rel="icon" href="{{ base_url }}/assets/favicon.ico" sizes="any">
+    <link rel="icon" href="{{ base_url }}/assets/icon.png" type="image/png">
     <style>
         :root {
             --body-bg: #fafafa;
@@ -17,7 +19,7 @@
             --code-bg: #f0f0f0;
             --code-color: inherit;
             --pre-border: none;
-            --header-pattern: url("/assets/background/memphis-pattern-header-light.svg");
+            --header-pattern: url("/assets/background/memphis-pattern-header-light.png");
             --pattern-opacity: 0.1;
         }
 
@@ -32,7 +34,7 @@
                 --code-bg: #252526;
                 --code-color: #ce9178;
                 --pre-border: 1px solid #3e3e42;
-                --header-pattern: url("/assets/background/memphis-pattern-header-dark.svg");
+                --header-pattern: url("/assets/background/memphis-pattern-header-dark.png");
                 --pattern-opacity: 0.05;
             }
         }
@@ -305,7 +307,6 @@
             overflow: hidden;
         }
 
-        /* Isolated Pattern Engine for Footer */
         footer::before {
             content: "";
             position: absolute;
@@ -342,10 +343,6 @@
 
             header {
                 padding: 1.5rem 0;
-            }
-
-            header::before, footer::before {
-                background-size: 120px 120px;
             }
 
             h1.site-title {
