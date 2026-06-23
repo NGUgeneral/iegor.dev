@@ -7,6 +7,32 @@
     <meta name="description" content="{{ description | default('Personal portfolio and technical writing by Egor.') }}">
     {{ meta_tags }}
     <style>
+        :root {
+            --body-bg: #fafafa;
+            --body-color: #555555;
+            --border-color: #e5e5e5;
+            --accent-primary: #2db898;
+            --accent-hover: #2db898;
+            --link-color: #0066cc;
+            --code-bg: #f0f0f0;
+            --code-color: inherit;
+            --pre-border: none;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --body-bg: #1e1e1e;
+                --body-color: #d4d4d4;
+                --border-color: #3e3e42;
+                --accent-primary: #7a92ad;
+                --accent-hover: #7a92ad;
+                --link-color: #569cd6;
+                --code-bg: #252526;
+                --code-color: #ce9178;
+                --pre-border: 1px solid #3e3e42;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -20,28 +46,15 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
-            color: #555555;
-            background: #fafafa;
+            color: var(--body-color);
+            background: var(--body-bg);
             transition: background-color 0.3s, color 0.3s;
         }
 
-        @media (prefers-color-scheme: dark) {
-            body {
-                color: #d4d4d4;
-                background: #1e1e1e;
-            }
-        }
-
         header {
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: 1px solid var(--border-color);
             padding: 2rem 0;
             margin-bottom: 2rem;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            header {
-                border-bottom-color: #3e3e42;
-            }
         }
 
         .header-container {
@@ -53,14 +66,8 @@
         h1.site-title {
             font-size: 2.75rem;
             font-weight: 600;
-            color: #2db898;
+            color: var(--accent-primary);
             margin-bottom: 0.5rem;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            h1.site-title {
-                color: #7a92ad;
-            }
         }
 
         .site-tagline {
@@ -86,13 +93,7 @@
 
         nav a:hover {
             opacity: 1;
-            color: #2db898;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            nav a:hover {
-                color: #7a92ad;
-            }
+            color: var(--accent-hover);
         }
 
         main {
@@ -124,23 +125,13 @@
         }
 
         .content a {
-            color: #0066cc;
+            color: var(--link-color);
             text-decoration: none;
             transition: color 0.2s;
         }
 
         .content a:hover {
-            color: #2db898;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .content a {
-                color: #569cd6;
-            }
-
-            .content a:hover {
-                color: #7a92ad;
-            }
+            color: var(--accent-hover);
         }
 
         .content ul,
@@ -154,53 +145,36 @@
         }
 
         .content blockquote {
-            border-left: 3px solid #e5e5e5;
+            border-left: 3px solid var(--border-color);
             padding-left: 1rem;
             margin: 1.5rem 0;
             opacity: 0.85;
             font-style: italic;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .content blockquote {
-                border-left-color: #3e3e42;
-            }
-        }
-
         .content code {
-            background: #f0f0f0;
+            background: var(--code-bg);
+            color: var(--code-color);
             padding: 0.2rem 0.4rem;
             border-radius: 3px;
             font-family: "Courier New", monospace;
             font-size: 0.9rem;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .content code {
-                background: #252526;
-                color: #ce9178;
-            }
-        }
-
         .content pre {
-            background: #f0f0f0;
+            background: var(--body-bg);
+            border: var(--pre-border);
             padding: 1rem;
             border-radius: 4px;
             overflow-x: auto;
             margin-bottom: 1rem;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .content pre {
-                background: #1e1e1e;
-                border: 1px solid #3e3e42;
-            }
-        }
-
         .content pre code {
             background: none;
             padding: 0;
             border-radius: 0;
+            color: inherit;
         }
 
         .content img {
@@ -226,15 +200,8 @@
         .post-item {
             margin-bottom: 1.5rem;
             padding-bottom: 1.5rem;
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: 1px solid var(--border-color);
         }
-
-        @media (prefers-color-scheme: dark) {
-            .post-item {
-                border-bottom-color: #3e3e42;
-            }
-        }
-
 
         .post-item:last-child {
             border-bottom: none;
@@ -253,13 +220,7 @@
         }
 
         .post-title a:hover {
-            color: #2db898;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .post-title a:hover {
-                color: #7a92ad;
-            }
+            color: var(--accent-hover);
         }
 
         .post-date {
@@ -279,15 +240,8 @@
         .project-item {
             margin-bottom: 1.5rem;
             padding-bottom: 1.5rem;
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: 1px solid var(--border-color);
         }
-
-        @media (prefers-color-scheme: dark) {
-            .project-item {
-                border-bottom-color: #3e3e42;
-            }
-        }
-
 
         .project-item:last-child {
             border-bottom: none;
@@ -306,13 +260,7 @@
         }
 
         .project-title a:hover {
-            color: #2db898;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .project-title a:hover {
-                color: #7a92ad;
-            }
+            color: var(--accent-hover);
         }
 
         .project-date {
@@ -326,7 +274,7 @@
         }
 
         footer {
-            border-top: 1px solid #e5e5e5;
+            border-top: 1px solid var(--border-color);
             padding: 2rem 0;
             margin-top: 3rem;
             text-align: center;
@@ -334,32 +282,16 @@
             opacity: 0.7;
         }
 
-        @media (prefers-color-scheme: dark) {
-            footer {
-                border-top-color: #3e3e42;
-            }
-        }
-
         .back-link {
             display: inline-block;
             margin-bottom: 1.5rem;
-            color: #0066cc;
+            color: var(--link-color);
             text-decoration: none;
             transition: color 0.2s;
         }
 
         .back-link:hover {
-            color: #2db898;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .back-link {
-                color: #569cd6;
-            }
-
-            .back-link:hover {
-                color: #7a92ad;
-            }
+            color: var(--accent-hover);
         }
 
         @media (max-width: 600px) {
@@ -402,7 +334,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 Egor Osaulenko. All rights reserved.</p>
+        <p>&copy; 2026 Iegor Osaulenko. All rights reserved.</p>
     </footer>
 </body>
 </html>
