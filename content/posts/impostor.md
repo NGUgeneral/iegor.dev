@@ -1,5 +1,5 @@
 ---
-title: About the impostor, the growth, and holding to your guns
+title: Slim Jim - Post-Mortem
 date: 2026-06-22
 excerpt: I made a full circle with Slim Jim - from "The Next Big Thing" to "Post-Mortem". But it was still a big win for me.
 ---
