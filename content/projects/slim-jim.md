@@ -9,14 +9,7 @@ excerpt: A very lightweight pdf generator which emphasizes generation of simple 
 Slim Jim is an ultra-fast, stateless compilation bridge tailored for high-load, simple-layout PDF generation. It translates a highly optimized, simplified HTML subset directly into native ReportLab canvas instructions, bypassing the massive resource overhead of headless browsers.
 
 ---
-## Pipeline visualisation
 
-```
-Raw HTML Payload ──► [ FastAPI Gateway ] ──► [ BeautifulSoup4 DOM Tree ]
-                                                            │
-Streaming PDF Binary ◄── [ ReportLab Engine ] ◄── [ Custom Tag Adapter ]
-```
----
 ## Detailed Benchmark and Source Code
 TLDR: Conteineraised Slim Jim generates 1000 A4 pdf documents in about 1.6 seconds.<br>
 You can find detailed benchmark results and methodology here: [Slim Jim Benchmark Gauntlet](https://iegor.dev/post/slim-jim-benchmark/)
