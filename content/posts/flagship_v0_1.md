@@ -6,7 +6,7 @@ excerpt: I am happy to anounce the release of my very own YAOSFFS (Yet Another O
 
 ![It ain't much, but it's honest work](/assets/it-aint-much.png)
 
-Flagship ([repository here](https://github.com/NGUgeneral/flagship-platform)) is YAOSFFS (Yet Another Open-Source Feature Flags Service). The twist - full gRPC communication loop by v1.0.<br>
+Flagship ([repository here](https://github.com/NGUgeneral/headsntails-platform)) is YAOSFFS (Yet Another Open-Source Feature Flags Service). The twist - full gRPC communication loop by v1.0.<br>
 It is not a unique solution, but will be a great case study for myself and hopefully an interesting digest into your feed.
 
 ## The Motivation:
