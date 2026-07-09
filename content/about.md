@@ -25,14 +25,11 @@ When designing and writing code, I rely on two non-negotiable North Stars:
 
 - **What I Build & Architect**: Distributed systems, robust microservice and serverless units, API gateways,
 and cloud/self-hosted deployments - extending into legacy desktop applications (WPF) when needed.
-
 - **The Languages I Write With**: Python (FastAPI, Flask, Pylons), Go, and C#/.NET Core, with a proven track
 record in zero-downtime legacy modernizations.
-
 - **How I Manage State & Data**: High-throughput PostgreSQL and MSSQL (relational tuning), Redis for
 caching, and MongoDB. This extends to cloud-native managed relational databases (AWS RDS, Azure
 SQL), distributed NoSQL/key-value stores (DynamoDB, Azure Cosmos DB), and scalable object storage.
-
 - **How I make the Components Talk to each other**: Event-driven architectures (Kafka, RabbitMQ, AWS SNS/SQS, Azure Service
 Bus), gRPC, and GraphQL for high-concurrency, low-latency service communication.
 - **Where I Deploy, how do I Automate and Protect from future mistakes**: Deploying across AWS, Azure, and DigitalOcean using Docker and
@@ -40,7 +37,6 @@ Kubernetes. I actively enforce engineering guardrails by building automated CI/C
 Actions and GitLab.
 - **How I manage Access, Identity & Security**: Implementing robust access boundaries using OAuth 2.0 / OIDC, JWT,
 corporate Okta integrations, and legacy Windows Identity / secure network proxies.
-
 - **What I can do pretty good but would rather avoid**: Frontend. I have extensive experience in maintaining complex frontend applications utilizing modern JS frameworks (React, Angular) and doing it as safe as possible (TypeScript). But I really would rather not. So let's just frame it as "Deep Frontend awareness".
 
 ---

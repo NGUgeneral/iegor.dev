@@ -46,6 +46,7 @@ All but Flagship Core is optional.
 ## The v0.1:
 The current release is a full ecosystem, ready to be spun up with a single docker-compose command.<br>
 For this version:
+
 - Full HTTP is acceptable for this release. But intranet between services is mandatory.
 - State fully handled by Redis is acceptable for this release.
 - JWT Authority can have a single high-entropy master cryptography key. It exists as a secret. On cloud, it lives in a single secret manager.

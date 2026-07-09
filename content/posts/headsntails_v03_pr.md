@@ -11,6 +11,7 @@ Recap:
  But with each release it shapes up more and more as a resilient system infrastructure blueprint.
 
 Milestones reached to unlock the v0.3:
+
 - **gRPC Introduced**: the initial design had one major bottleneck: rate-limiter communication via HTTP. This version replaces it with gRPC at once. The change is drastic.
 - **The Documentation**: All public-facing services have exposed their endpoints in one place. Openapi documentation is now available `/docs`. Internal endpoints, even if visible, are whitelisted on Nginx to local IPs. For now - it is enough.
 - **The High-Load**: High-Load benchmark service, [Fortio](https://fortio.org/) introduced into the system. It proved to be a great asset outside of simple benchmark but stress testing the system. Implementing it directly allows to test internal endpoints as well.
