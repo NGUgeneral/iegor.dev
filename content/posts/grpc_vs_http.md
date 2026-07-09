@@ -27,7 +27,7 @@ This diagram represents it perfectly.
 
 2. Under heavy concurrency gRPC faces the wall of the system capabilities itself.
 This is very well illustrated in the Average Latency Time diagram.
-![Avg. Lat (ms)](/assets/http-vs-grpc/http_vs_grpc_diagram_avg_lat.png).
+![Avg. Lat (ms)](/assets/http-vs-grpc/http_vs_grpc_diagram_avg_lat.png)
 
 3. **gRPC "performance domination" compared to HTTP is not linear**. 
 
