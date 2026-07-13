@@ -336,6 +336,7 @@ def main():
 
     global env
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
+    env.globals["current_year"] = datetime.now().year
 
     posts = build_posts()
     projects = build_projects()
