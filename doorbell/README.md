@@ -1,0 +1,2 @@
+Doorbell - is a serverless function, which is responsible to store anonymous, GDPR compliant, pageview data.
+This folder stores the DB-seeding schemas and implementations for different cloud platforms.

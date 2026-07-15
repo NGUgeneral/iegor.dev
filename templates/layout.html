@@ -393,6 +393,11 @@
 
     <footer>
         <p>&copy; {{ current_year }} Iegor Osaulenko. All rights reserved.</p>
+        <!-- The Shopkeeper's Bell (Anonymized Pageview Tracker) -->
+        <img
+            src="https://vbqqmbtwkvacsdhlcwra.supabase.co/functions/v1/doorbell?path={{ title | lower | replace(' ', '-') }}" 
+                width="1" height="1" alt="" style="position: absolute; left: -9999px; opacity: 0;" 
+        />
     </footer>
 </body>
 </html>
