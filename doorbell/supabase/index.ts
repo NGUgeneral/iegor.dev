@@ -88,7 +88,7 @@ serve(async (req) => {
       }
     }
 
-    supabaseClient
+    await supabaseClient
       .from("doorbell_pageviews")
       .insert([{
         page_path: pagePath,
