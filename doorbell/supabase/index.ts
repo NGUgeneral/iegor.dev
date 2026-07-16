@@ -17,6 +17,26 @@ const PIXEL_BYTES = new Uint8Array([
 ]);
 
 let readerPromise: Promise<Reader> | null = null;
+const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
+
+async function getReader() {
+  if (readerPromise) return readerPromise;
+
+  readerPromise = (async () => {
+    const { data, error } = await supabaseClient.storage
+      .from("assets")
+      .download("user-country.mmdb");
+
+    if (error) throw error;
+
+    const arrayBuffer = await data.arrayBuffer();
+    return new Reader(Buffer.from(new Uint8Array(arrayBuffer)));
+  })();
+
+  return readerPromise;
+}
 
 serve(async (req) => {
   const pixelResponse = new Response(PIXEL_BYTES, {
@@ -28,32 +48,14 @@ serve(async (req) => {
   });
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
-
     const clientIp = req.headers.get("x-real-ip") || req.headers.get("cf-connecting-ip");
     let countryCode = "XX";
 
     if (clientIp && clientIp !== "127.0.0.1" && clientIp !== "::1") {
       try {
-        if (!readerPromise) {
-          readerPromise = (async () => {
-            const { data, error } = await supabaseClient.storage
-              .from("assets")
-              .download("user-country.mmdb");
-
-            if (error) throw error;
-
-            const arrayBuffer = await data.arrayBuffer();
-            const nodeBuffer = Buffer.from(new Uint8Array(arrayBuffer));
-            return new Reader(nodeBuffer);
-          })();
-        }
-
-        const readerInstance = await readerPromise;
-        const geoData = readerInstance.get(clientIp);
-        if (geoData && geoData.country_code) {
+        const reader = await getReader();
+        const geoData = reader.get(clientIp);
+        if (geoData?.country_code) {
           countryCode = geoData.country_code;
         }
       } catch (geoErr) {
@@ -66,15 +68,7 @@ serve(async (req) => {
     const refererHeader = req.headers.get("referer") || "";
 
     if (!pagePath) {
-      if (refererHeader) {
-        try {
-          pagePath = new URL(refererHeader).pathname;
-        } catch {
-          pagePath = "Malformed";
-        }
-      } else {
-        pagePath = "Direct";
-      }
+      pagePath = refererHeader ? new URL(refererHeader).pathname : "Direct";
     }
 
     const userAgent = req.headers.get("user-agent") || "";
@@ -82,17 +76,12 @@ serve(async (req) => {
     const isBot = /bot|crawler|spider|copt|mediapartners/i.test(userAgent);
     
     let referrerHost = "Bot";
-
     if (!isBot && pagePath !== "unknown") {
       referrerHost = "Direct";
       if (refererHeader) {
         try {
           const parsedHost = new URL(refererHeader).hostname;
-          if (parsedHost === "iegor.dev" || parsedHost === "localhost" || parsedHost === "127.0.0.1") {
-            referrerHost = "Direct";
-          } else {
-            referrerHost = parsedHost;
-          }
+          referrerHost = (parsedHost === "iegor.dev" || parsedHost === "localhost") ? "Direct" : parsedHost;
         } catch {
           referrerHost = "Malformed";
         }
@@ -101,23 +90,14 @@ serve(async (req) => {
 
     supabaseClient
       .from("doorbell_pageviews")
-      .insert([
-        {
-          page_path: pagePath,
-          country_code: countryCode,
-          device_type: deviceType,
-          referrer_host: referrerHost,
-          hit_date: new Date().toISOString().split("T")[0],
-        }
-      ])
-      .then(({ error: dbError }) => {
-        if (dbError) {
-          console.error("Doorbell DB Write Error:", dbError.message);
-        }
-      })
-      .catch((err) => {
-        console.error("Doorbell DB Connection Error:", err.message);
-      });
+      .insert([{
+        page_path: pagePath,
+        country_code: countryCode,
+        device_type: deviceType,
+        referrer_host: referrerHost,
+        hit_date: new Date().toISOString().split("T")[0],
+      }])
+      .then(({ error: dbError }) => { if (dbError) console.error("DB Write Error:", dbError.message); });
 
     return pixelResponse;
 
