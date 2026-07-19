@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""
-Ultra-lightweight static site generator for iegor.dev
-Converts Markdown content with front-matter to static HTML using Jinja2 templates.
-"""
 
-import os
 import shutil
 import re
 from datetime import datetime
@@ -12,7 +7,6 @@ from pathlib import Path
 import markdown
 from jinja2 import Environment, FileSystemLoader
 
-# Configuration
 BASE_DIR = Path(__file__).parent
 CONTENT_DIR = BASE_DIR / "content"
 POSTS_DIR = CONTENT_DIR / "posts"
@@ -22,10 +16,7 @@ OUTPUT_DIR = BASE_DIR / "docs"
 SRC_ASSETS_DIR = BASE_DIR / "assets"
 LAYOUT_TEMPLATE = "layout.html"
 
-# Subdirectory Routing Control
-# Set to "/iegor.dev" for standard GitHub Pages project links.
-# Change to "" (empty string) once you connect your custom iegor.dev domain.
-# BASE_URL = "/iegor.dev"
+SITE_URL = "https://iegor.dev"
 BASE_URL = ""
 
 # Ensure paths exist
@@ -147,6 +138,7 @@ def build_projects_page(projects):
 
     projects_page_html = env.get_template(LAYOUT_TEMPLATE).render(
         base_url=BASE_URL,
+        canonical_url=f"{SITE_URL}{BASE_URL}/projects/",
         title="Projects",
         description="A list of implemented and supported projects.",
         content=f"<h1>Projects</h1>\n{projects_list_html}",
@@ -179,6 +171,7 @@ def build_posts_page(posts):
 
     posts_page_html = env.get_template(LAYOUT_TEMPLATE).render(
         base_url=BASE_URL,
+        canonical_url=f"{SITE_URL}{BASE_URL}/posts/",
         title="Posts",
         description="A collection of posts about backend engineering, system design, and technical insights.",
         content=f"<h1>Posts</h1>\n{posts_list_html}",
@@ -222,6 +215,7 @@ def build_projects():
 
         project_html = env.get_template(LAYOUT_TEMPLATE).render(
             base_url=BASE_URL,
+            canonical_url=f"{SITE_URL}{BASE_URL}/project/{project['slug']}/",
             title=project["title"],
             description=project.get("excerpt", ""),
             content=project["content"],
@@ -254,6 +248,7 @@ def build_posts():
 
         post_html = env.get_template(LAYOUT_TEMPLATE).render(
             base_url=BASE_URL,
+            canonical_url=f"{SITE_URL}{BASE_URL}/post/{post['slug']}/",
             title=post["title"],
             description=post.get("excerpt", ""),
             content=post["content"],
@@ -280,6 +275,7 @@ def build_home(posts):
 
     home_html = env.get_template(LAYOUT_TEMPLATE).render(
         base_url=BASE_URL,
+        canonical_url=f"{SITE_URL}{BASE_URL}/",
         title="Home",
         description="Backend engineer, system design enthusiast, and technical writer.",
         content=html_content,
@@ -305,6 +301,7 @@ def build_contact():
 
     contact_html = env.get_template(LAYOUT_TEMPLATE).render(
         base_url=BASE_URL,
+        canonical_url=f"{SITE_URL}{BASE_URL}/contact/",
         title="Contact",
         description="Get in touch for backend architecture, system design, and technical consulting.",
         content=html_content,

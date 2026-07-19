@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} – Iegor Dev</title>
+    <title>{{ title }} - Iegor Dev</title>
     <meta name="description" content="{{ description | default('Personal portfolio and technical writing by Iegor.') }}">
+    {% if canonical_url %}
+    <link rel="canonical" href="{{ canonical_url }}">
+    {% endif %}
     {{ meta_tags }}
     <link rel="icon" href="{{ base_url }}/assets/favicon.ico" sizes="any">
     <link rel="icon" href="{{ base_url }}/assets/icon.png" type="image/png">
