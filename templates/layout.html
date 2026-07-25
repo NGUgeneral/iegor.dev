@@ -20,6 +20,7 @@
             --accent-hover: #d1347a;
             --link-color: #0066cc;
             --code-bg: #f0f0f0;
+            --code-color: var(--accent-primary);
             --pre-border: none;
             --header-pattern: url("/assets/background/memphis-pattern-header-light.png");
             --pattern-opacity: 0.1;
@@ -44,6 +45,7 @@
                 --accent-hover: #7a92ad;
                 --link-color: #569cd6;
                 --code-bg: #252526;
+                --code-color: #ce9178;
                 --pre-border: 1px solid #3e3e42;
                 --header-pattern: url("/assets/background/memphis-pattern-header-dark.png");
                 --pattern-opacity: 0.05;
@@ -225,7 +227,7 @@
         /* Inline Code Snippets (e.g., `git commit`) */
         .content :not(pre) > code {
             background: var(--code-bg);
-            color: var(--accent-primary);
+            color: var(--code-color);
             padding: 0.2rem 0.4rem;
             border-radius: 3px;
             font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
