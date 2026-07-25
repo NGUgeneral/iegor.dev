@@ -24,6 +24,14 @@
             --pre-border: none;
             --header-pattern: url("/assets/background/memphis-pattern-header-light.png");
             --pattern-opacity: 0.1;
+            --code-keyword: #d73a49;      /* .k, .kn, .o */
+            --code-punctuation: #24292e;  /* .p */
+            --code-tag: #22863a;          /* .nt - JSON keys / HTML tags */
+            --code-string: #032f62;       /* .s, .s1, .s2 */
+            --code-comment: #6a737d;      /* .c, .c1 */
+            --code-function: #6f42c1;     /* .nf, .nc */
+            --code-number: #005cc5;       /* .mi, .mf */
+            --code-boolean: #d73a49;      /* .kc */
         }
 
         @media (prefers-color-scheme: dark) {
@@ -39,8 +47,34 @@
                 --pre-border: 1px solid #3e3e42;
                 --header-pattern: url("/assets/background/memphis-pattern-header-dark.png");
                 --pattern-opacity: 0.05;
+                --code-keyword: #ff7b72;
+                --code-punctuation: #c9d1d9;
+                --code-tag: #7ee787;
+                --code-string: #a5d6ff;
+                --code-comment: #8b949e;
+                --code-function: #d2a8ff;
+                --code-number: #79c0ff;
+                --code-boolean: #ff7b72;
             }
         }
+
+        /* START: Pygments Syntax Highlighting Theme (Minimal Dark/Light Compatible) */
+        .codehilite .k  { color: var(--code-keyword); font-weight: bold; } /* Keywords (def, import, return) */
+        .codehilite .kn { color: var(--code-keyword); font-weight: bold; } /* Namespace keywords */
+        .codehilite .o  { color: var(--code-keyword); }                   /* Operators (=, +, -) */
+        .codehilite .kc { color: var(--code-boolean); font-weight: bold; } /* Booleans (true, false, None) */
+        .codehilite .p  { color: var(--code-punctuation); }               /* Punctuation ({ }, [ ], :, ,) */
+        .codehilite .nt { color: var(--code-tag); font-weight: bold; }    /* Tag / JSON Key */
+        .codehilite .s  { color: var(--code-string); }                    /* Generic String */
+        .codehilite .s1 { color: var(--code-string); }                    /* Single-quoted String */
+        .codehilite .s2 { color: var(--code-string); }                    /* Double-quoted String */
+        .codehilite .c  { color: var(--code-comment); font-style: italic; } /* Comment */
+        .codehilite .c1 { color: var(--code-comment); font-style: italic; } /* Single-line Comment */
+        .codehilite .nf { color: var(--code-function); }                  /* Function Name */
+        .codehilite .nc { color: var(--code-function); font-weight: bold; }/* Class Name */
+        .codehilite .mi { color: var(--code-number); }                    /* Integer */
+        .codehilite .mf { color: var(--code-number); }                    /* Float */
+        /* END: Pygments Syntax Highlighting Theme (Minimal Dark/Light Compatible) */
 
         * {
             margin: 0;
@@ -199,19 +233,32 @@
         }
 
         .content pre {
-            background: var(--body-bg);
+            background: var(--code-bg);
             border: var(--pre-border);
             padding: 1rem;
             border-radius: 4px;
             overflow-x: auto;
             margin-bottom: 1rem;
+            line-height: 1.45;
+        }
+
+        .content :not(pre) > code {
+            background: var(--code-bg);
+            color: var(--code-color);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
         }
 
         .content pre code {
-            background: none;
+            background: transparent;
             padding: 0;
             border-radius: 0;
-            color: inherit;
+            font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+            white-space: pre;
+            color: var(--body-color);
         }
 
         .content img {

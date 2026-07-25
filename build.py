@@ -49,7 +49,10 @@ def parse_front_matter(content):
 
 def render_markdown(content):
     """Convert markdown to HTML and fix absolute paths for subdirectories using Regex."""
-    html = markdown.markdown(content, extensions=["fenced_code", "tables", "toc", "nl2br"])
+    html = markdown.markdown(
+        content,
+        extensions=["fenced_code", "tables", "toc", "nl2br", "codehilite"]
+    )
     
     if BASE_URL:
         # 1. Finds ANY src="/..." or href="/..." and prepends BASE_URL
@@ -270,7 +273,7 @@ def build_home(posts):
         return
 
     content = read_file(about_path)
-    metadata, markdown_content = parse_front_matter(content)
+    _, markdown_content = parse_front_matter(content)
     html_content = render_markdown(markdown_content)
 
     home_html = env.get_template(LAYOUT_TEMPLATE).render(
@@ -296,7 +299,7 @@ def build_contact():
         return
 
     content = read_file(contact_path)
-    metadata, markdown_content = parse_front_matter(content)
+    _, markdown_content = parse_front_matter(content)
     html_content = render_markdown(markdown_content)
 
     contact_html = env.get_template(LAYOUT_TEMPLATE).render(
@@ -321,7 +324,7 @@ Allow: /
 Sitemap: https://iegor.dev/sitemap.xml
 """
     write_file(OUTPUT_DIR / "robots.txt", robots_content)
-    print(f"✓ Generated: robots.txt")
+    print("✓ Generated: robots.txt")
 
 
 def main():
