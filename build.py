@@ -318,6 +318,32 @@ def build_contact():
     print(f"✓ Generated contact page: {output_path.relative_to(BASE_DIR)}")
 
 
+def build_privacy_policy():
+    """Build the privacy policy page."""
+    privacy_path = CONTENT_DIR / "privacy.md"
+
+    if not privacy_path.exists():
+        print("⚠ No privacy.md found. Skipping privacy policy page generation.")
+        return
+
+    content = read_file(privacy_path)
+    _, markdown_content = parse_front_matter(content)
+    html_content = render_markdown(markdown_content)
+
+    privacy_html = env.get_template(LAYOUT_TEMPLATE).render(
+        base_url=BASE_URL,
+        canonical_url=f"{SITE_URL}{BASE_URL}/privacy/",
+        title="Privacy Policy",
+        description="Read our privacy policy regarding data collection and usage.",
+        content=html_content,
+        meta_tags='<meta name="og:type" content="website">',
+    )
+
+    output_path = OUTPUT_DIR / "privacy" / "index.html"
+    write_file(output_path, privacy_html)
+    print(f"✓ Generated privacy policy page: {output_path.relative_to(BASE_DIR)}")
+
+
 def build_404():
     """Build a custom 404 page at /404.html for GitHub Pages."""
     content_404 = """
@@ -376,6 +402,7 @@ def main():
     build_projects_page(projects)
     build_home(posts)
     build_contact()
+    build_privacy_policy()
     build_404()
     create_robots_txt()
 

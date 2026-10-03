@@ -291,6 +291,4 @@ Perfect for personal blogs, portfolios, and technical writing.
 
 Feel free to fork, modify, and use this for your own site.
 
----
-
 **Happy writing!** 🚀
