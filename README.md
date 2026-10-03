@@ -5,9 +5,9 @@ A pragmatic, zero-runtime static site generator written in pure Python. Converts
 ## ✨ Features
 
 - **Pure Static** – No JavaScript, no runtime servers. Pure HTML/CSS served directly from GitHub Pages
-- **Minimal Dependencies** – Only Jinja2 and Markdown (plus Python stdlib)
+- **Small Python Build** – Dependencies are listed in `requirements.txt`; the deployed site has no runtime server
 - **Fast Build** – Entire site builds in milliseconds
-- **Clean URLs** – Posts accessible at `/post/{slug}/` (no `.html` extensions needed)
+- **Clean URLs** – Posts and projects have extension-free routes
 - **Dark Mode Support** – Automatic dark/light mode via CSS media queries
 - **SEO Ready** – Proper meta tags, semantic HTML, Open Graph support
 - **Simple Pipeline** – One Python script, no complex configuration
@@ -17,92 +17,78 @@ A pragmatic, zero-runtime static site generator written in pure Python. Converts
 ```
 .
 ├── build.py                        # Main build script
+├── serve.py                        # Local preview server with custom 404 handling
+├── requirements.txt                # Python build dependencies
+├── .env.example                    # Example local build settings
 ├── templates/
 │   └── layout.html                 # Jinja2 base template (header, nav, footer, CSS)
 ├── content/
 │   ├── about.md                    # Home page content
-│   └── posts/
-│       ├── hello-world.md          # Sample post 1
-│       └── system-design-notes.md  # Sample post 2
-│   └── projects/
-│       ├── hello-world.md          # Sample project 1
-│       └── system-design-notes.md  # Sample project 2
-├── docs/                           # OUTPUT - Generated static site (GitHub Pages)
-│   ├── index.html
-│   ├── robots.txt
-│   └── post/
-│       ├── hello-world/
-│       │   └── index.html
-│       └── system-design-notes/
-│           └── index.html
-└── .venv/                           # Python virtual environment
+│   ├── contact.md
+│   ├── privacy.md
+│   ├── posts/                      # Markdown posts
+│   └── projects/                   # Markdown project pages
+├── assets/                         # Static source assets copied into the build
+└── docs/                           # Generated output; not committed
 ```
 
 ## 🚀 Quick Start
 
-### 1. Setup Python Environment
+### 1. Create a Python Environment
 
-The virtual environment is already configured. To activate it:
+From the repository root, create and activate a virtual environment:
 
 **On PowerShell (Windows):**
 ```powershell
+py -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
 **On bash (macOS/Linux):**
 ```bash
+python3 -m venv .venv
 source .venv/bin/activate
 ```
 
 ### 2. Install Dependencies
 
-Dependencies are already installed. To verify:
-```bash
-pip list | grep -E "jinja2|markdown"
+Install the packages used by the build script:
+```sh
+python -m pip install -r requirements.txt
 ```
 
-Or reinstall if needed:
-```bash
-pip install jinja2 markdown
+### 3. Configure Local Build Settings
+
+Copy `.env.example` to `.env`:
+
+**PowerShell:**
+```powershell
+Copy-Item .env.example .env
 ```
 
-### 3. Build the Site
+**Bash:**
+```bash
+cp .env.example .env
+```
+
+The example sets `ANALYTICS_ENABLED=false`, so local builds omit the analytics pixel. `.env` is ignored by Git. To test the enabled build locally, change the value to `true` in `.env`.
+
+### 4. Build the Site
 
 ```bash
 python build.py
 ```
 
-**Expected output:**
-```
-🔨 Building static site...
+The generated site is written to `docs/`, including the home, posts, projects, contact, privacy, and 404 pages, plus `robots.txt` and `sitemap.xml`.
 
-✓ Cleared C:\Users\name\source\repos\iegor.dev\docs
-✓ Processed: Hello World (hello-world.md)
-✓ Processed: System Design Notes (system-design-notes.md)
-  → Generated: docs\post\hello-world\index.html
-  → Generated: docs\post\system-design-notes\index.html
-✓ Processed: Hello World (hello-world.md)
-✓ Processed: System Design Notes (system-design-notes.md)
-  → Generated: docs\project\hello-world\index.html
-  → Generated: docs\project\system-design-notes\index.html
+### 5. Preview Locally
 
-✓ Generated posts page: docs\posts\index.html
-✓ Generated projects page: docs\projects\index.html
-✓ Generated home page: docs\index.html
-✓ Generated contact page: docs\contact\index.html
-✓ Generated: robots.txt
-
-✅ Build complete!
-```
-
-### 4. Preview Locally
-
-Python 3.7+:
+Run the local preview server from the repository root:
 ```bash
 python serve.py
 ```
 
-Then open http://localhost:8000 in your browser.
+Open <http://127.0.0.1:8000>. The preview server serves files from `docs/` and uses the generated `404.html` for missing paths.
 
 ## 📝 Creating Content
 
@@ -171,6 +157,8 @@ Template variables available:
 - `{{ description }}` – Meta description
 - `{{ content }}` – Rendered HTML content
 - `{{ meta_tags }}` – Additional meta tags (OG, Twitter cards, etc.)
+- `{{ current_year }}` – Current year for the footer
+- `{{ analytics_enabled }}` – Controls whether the analytics pixel is rendered
 
 ### Styling
 
@@ -184,30 +172,39 @@ All CSS is embedded in `templates/layout.html` for maximum portability. Modify t
 
 `build.py` performs these steps:
 
-1. **Clears `/docs`** – Removes all previous output to prevent stale files
+1. **Clears `docs/`** – Removes all previous generated output
 2. **Parses Content** – Reads markdown files and extracts YAML front-matter
-3. **Renders Posts** – Converts markdown to HTML using Jinja2 templates
-4. **Generates Listings** – Creates sorted post list on home page
-5. **Outputs HTML** – Writes clean, self-contained HTML files
+3. **Renders Pages** – Converts Markdown posts, projects, and static content pages to HTML using the layout template
+4. **Generates Indexes** – Creates posts and projects listings
+5. **Generates SEO Files** – Writes `robots.txt` and `sitemap.xml`
+6. **Copies Assets** – Copies `assets/` into `docs/assets/`
 
-All generated HTML includes embedded CSS and is completely self-contained.
+Generated pages include embedded CSS. Static images and other assets remain separate files under `docs/assets/`.
+
+### Analytics Build Setting
+
+The build reads `ANALYTICS_ENABLED` as an environment variable. `.env` supplies the local value; `load_dotenv` does not override a value already supplied by the process environment. The GitHub Actions workflow passes the GitHub Actions variable into the build.
+
+To enable the pixel for production deployments, add the Actions **repository variable** `ANALYTICS_ENABLED` with value `true` under **Settings → Secrets and variables → Actions → Variables**. Leave it unset or set it to `false` to omit the pixel. This is a public boolean setting, not a secret.
 
 ## 📦 Deployment to GitHub Pages
 
-1. Push all files (including `/docs`) to your repository:
+The repository deploys through `.github/workflows/deploy.yml`. On pushes to `main` (or a manual workflow run), GitHub Actions installs the dependencies, builds the site, and deploys the `docs/` artifact to GitHub Pages. Generated `docs/` output does not need to be committed.
+
+To configure Pages for this workflow:
+
+1. In GitHub, open **Settings → Pages**.
+2. Set **Build and deployment → Source** to **GitHub Actions**.
+3. Push changes to `main` or run **Build and Deploy Portfolio** from the Actions tab.
+
+The site is published at <https://iegor.dev>.
+
+To deploy a content change:
 ```bash
-git add .
-git commit -m "Build site"
+git add content/ templates/ assets/
+git commit -m "Update site content"
 git push origin main
 ```
-
-2. In your GitHub repository settings:
-   - Go to **Settings → Pages**
-   - Set **Source** to "Deploy from a branch"
-   - Set **Branch** to `main`, folder to `/docs`
-   - Click Save
-
-3. GitHub Pages will now serve your site at `https://yourusername.github.io/`
 
 ## 🔄 Workflow
 
@@ -220,15 +217,15 @@ git push origin main
 # 2. Build the site
 python build.py
 
-# 3. Preview
-python -m http.server 8000 --directory docs
+# 3. Preview using the local server (includes custom 404 handling)
+python serve.py
 
-# 4. Check at http://localhost:8000/post/new-article/
+# 4. Check at http://127.0.0.1:8000/post/new-article/
 
-# 5. Deploy
-git add .
+# 5. Deploy by pushing to main
+git add content/posts/new-article.md
 git commit -m "Add new post"
-git push
+git push origin main
 ```
 
 ## 📚 Markdown Features Supported
