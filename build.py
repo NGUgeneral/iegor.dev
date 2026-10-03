@@ -370,13 +370,60 @@ def build_404():
 
 def create_robots_txt():
     """Create a robots.txt file for SEO."""
-    robots_content = """User-agent: *
+    robots_content ="""
+User-agent: *
 Allow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
 
 Sitemap: https://iegor.dev/sitemap.xml
 """
+
     write_file(OUTPUT_DIR / "robots.txt", robots_content)
     print("✓ Generated: robots.txt")
+
+
+def create_sitemap(posts, projects):
+    """Generate dynamic sitemap.xml for all static routes."""
+    now = datetime.now().strftime("%Y-%m-%d")
+    
+    # Core static pages
+    urls = [
+        f"{SITE_URL}{BASE_URL}/",
+        f"{SITE_URL}{BASE_URL}/posts/",
+        f"{SITE_URL}{BASE_URL}/projects/",
+        f"{SITE_URL}{BASE_URL}/contact/",
+    ]
+    
+    # Dynamic post & project routes
+    for post in posts:
+        urls.append(f"{SITE_URL}{BASE_URL}/post/{post['slug']}/")
+        
+    for project in projects:
+        urls.append(f"{SITE_URL}{BASE_URL}/project/{project['slug']}/")
+
+    xml_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+    ]
+    
+    for url in urls:
+        xml_lines.append(f'  <url>\n    <loc>{url}</loc>\n    <lastmod>{now}</lastmod>\n  </url>')
+        
+    xml_lines.append('</urlset>')
+
+    write_file(OUTPUT_DIR / "sitemap.xml", "\n".join(xml_lines))
+    print(f"✓ Generated sitemap.xml: {OUTPUT_DIR / 'sitemap.xml'}")
 
 
 def main():
@@ -405,6 +452,7 @@ def main():
     build_privacy_policy()
     build_404()
     create_robots_txt()
+    create_sitemap(posts, projects)
 
     print(f"\n✅ Build complete! Output: {OUTPUT_DIR}\n")
 
