@@ -99,7 +99,7 @@ python build.py
 
 Python 3.7+:
 ```bash
-python -m http.server 8000 --directory docs
+python serve.py
 ```
 
 Then open http://localhost:8000 in your browser.

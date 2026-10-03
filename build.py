@@ -316,6 +316,30 @@ def build_contact():
     print(f"✓ Generated contact page: {output_path.relative_to(BASE_DIR)}")
 
 
+def build_404():
+    """Build a custom 404 page at /404.html for GitHub Pages."""
+    content_404 = """
+    <div style="text-align: center; padding: 3rem 0;">
+        <h1 style="font-size: 2.2rem; margin-bottom: 1rem; color: var(--accent-primary);">404 – Page Not Found</h1>
+        <p>The page you are looking for doesn't exist or has been moved.</p>
+        <p style="margin-top: 1.5rem;"><a href="/" class="back-link">&larr; Return to Home</a></p>
+    </div>
+    """
+
+    page_404_html = env.get_template(LAYOUT_TEMPLATE).render(
+        base_url=BASE_URL,
+        canonical_url=f"{SITE_URL}{BASE_URL}/404.html",
+        title="Page Not Found",
+        description="The requested page could not be found.",
+        content=content_404,
+        meta_tags='<meta name="robots" content="noindex, follow">',
+    )
+
+    output_path = OUTPUT_DIR / "404.html"
+    write_file(output_path, page_404_html)
+    print(f"✓ Generated 404 page: {output_path.relative_to(BASE_DIR)}")
+
+
 def create_robots_txt():
     """Create a robots.txt file for SEO."""
     robots_content = """User-agent: *
@@ -346,6 +370,7 @@ def main():
     build_projects_page(projects)
     build_home(posts)
     build_contact()
+    build_404()
     create_robots_txt()
 
     print(f"\n✅ Build complete! Output: {OUTPUT_DIR}\n")
