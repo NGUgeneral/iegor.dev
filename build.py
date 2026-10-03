@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
+import os
 import shutil
 import re
 from datetime import datetime
 from pathlib import Path
+from dotenv import load_dotenv
 import markdown
 from jinja2 import Environment, FileSystemLoader
 
@@ -353,6 +355,7 @@ Sitemap: https://iegor.dev/sitemap.xml
 
 def main():
     """Main build process."""
+    load_dotenv(BASE_DIR / ".env")
     print("\n🔨 Building static site...\n")
 
     clear_docs_dir()
@@ -361,6 +364,9 @@ def main():
     global env
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
     env.globals["current_year"] = datetime.now().year
+    env.globals["analytics_enabled"] = (
+        os.getenv("ANALYTICS_ENABLED", "").strip().lower() == "true"
+    )
 
     posts = build_posts()
     projects = build_projects()
